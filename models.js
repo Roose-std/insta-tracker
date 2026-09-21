@@ -1,17 +1,24 @@
 const mongoose = require('mongoose');
 
-const TargetSchema = new mongoose.Schema({
+// 1. جدول الحسابات المستهدفة للمراقبة
+const targetSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
+  isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });
 
-const SnapshotSchema = new mongoose.Schema({
+// 2. جدول اللقطات (Snapshots) للبيانات المسحوبة
+const snapshotSchema = new mongoose.Schema({
   username: { type: String, required: true },
-  followers: [{ type: String }],
-  scrapedAt: { type: Date, default: Date.now }
+  followersCount: { type: Number, default: 0 },
+  followingCount: { type: Number, default: 0 },
+  postsCount: { type: Number, default: 0 },
+  bio: { type: String, default: '' },
+  profilePicUrl: { type: String, default: '' },
+  fetchedAt: { type: Date, default: Date.now }
 });
 
-module.exports = {
-  Target: mongoose.model('Target', TargetSchema),
-  Snapshot: mongoose.model('Snapshot', SnapshotSchema)
-};
+const Target = mongoose.model('Target', targetSchema);
+const Snapshot = mongoose.model('Snapshot', snapshotSchema);
+
+module.exports = { Target, Snapshot };
